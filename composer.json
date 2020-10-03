@@ -1,0 +1,47 @@
+{
+    "name": "exception.error/php-grpc-example",
+    "description": "PHP gRPC Example",
+    "keywords": ["roadrunner", "docker", "grpc"],
+    "type": "project",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "ExceptionError",
+            "email": "exception.error@gmail.com"
+        }
+    ],
+    "require": {
+        "php": "^7.4",
+        "google/protobuf": "^3.13",
+        "grpc/grpc": "^1.30",
+        "nyholm/psr7": "^1.2",
+        "spiral/php-grpc": "^1.4",
+        "spiral/roadrunner": "1.8.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "": "src/",
+            "GPBMetadata\\": "./generated/GPBMetadata/",
+            "Service\\": "./generated/Service/"
+        }
+    },
+    "scripts": {
+        "post-create-project-cmd": [
+            "@init-config"
+        ],
+        "init-config": [
+            "php -r \"file_exists('etc/roadrunner/.rr.yaml') || copy('containers/roadrunner/config/.rr.yaml', 'etc/roadrunner/.rr.yaml');\""
+        ],
+        "reset-workers": [
+            "docker exec roadrunner rr -c /etc/roadrunner/.rr.yaml http:reset"
+        ],
+        "show-workers": [
+            "docker exec roadrunner rr -c /etc/roadrunner/.rr.yaml http:workers -i"
+        ]
+    },
+    "config": {
+        "preferred-install": "dist",
+        "sort-packages": true,
+        "optimize-autoloader": true
+    }
+}

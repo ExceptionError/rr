@@ -1,0 +1,33 @@
+grpc:
+  listen: "tcp://:9001"
+  proto: "/var/www/app/protos/service.proto"
+  tls:
+    key:  "/var/www/app/cert/server.key"
+    cert: "/var/www/app/cert/server.crt"
+  workers:
+    command: "php /var/www/app/grpc.php"
+    pool:
+      numWorkers: 4
+
+http:
+  address: :8080
+  workers:
+    command: "php /var/www/app/http.php"
+    relay: "unix://rr.sock"
+    pool:
+      numWorkers: 4
+
+# reload can reset rr servers when files change
+reload:
+  enabled: true
+  # refresh internval (default 1s)
+  interval: 1s
+  # file extensions to watch, defaults to [.php]
+  patterns: [".php"]
+  # list of services to watch
+  services:
+    http:
+      # list of dirs, "" root
+      dirs: ["/var/www/app"]
+      # include sub directories
+      recursive: true

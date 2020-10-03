@@ -1,0 +1,20 @@
+version: '3.4'
+
+services:
+  roadrunner:
+    build: ./containers/roadrunner
+    container_name: "roadrunner"
+    ports:
+      - 8080:8080
+    volumes:
+      - ./:/var/www/app
+      - ./etc/roadrunner:/etc/roadrunner:cached
+  roadrunner-grpc:
+    build: ./containers/roadrunner
+    container_name: "roadrunner-grpc"
+    ports:
+      - 9001:9001
+    volumes:
+      - ./:/var/www/app
+      - ./etc/roadrunner:/etc/roadrunner:cached
+    entrypoint: ["/usr/local/bin/rr-grpc", "serve", "-d", "-c", "/etc/roadrunner/.rr.yaml"]
